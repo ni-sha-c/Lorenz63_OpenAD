@@ -1,7 +1,7 @@
 program driver
 	use OAD_active
 	use OAD_rev
-	use Lorenz63
+	use lorenz63_passive
 	implicit none 
 	external head
 	type(active) :: x, y
