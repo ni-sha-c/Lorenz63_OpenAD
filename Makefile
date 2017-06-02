@@ -4,8 +4,8 @@ endif
 ifndef CC
 CC=gcc
 endif
-RTSUPP=w2f__types OAD_active OAD_cp OAD_tape OAD_rev ad_inline  
-driver: $(addsuffix .o, $(RTSUPP) iaddr)  lorenz63_passive.o numCore.pre.xb.x2w.w2f.post.o driver.o
+RTSUPP=w2f__types OAD_active OAD_cp OAD_tape OAD_rev   
+driver: $(addsuffix .o, $(RTSUPP) iaddr) lorenz63_passive.o numCore.pre.xb.x2w.w2f.post.o driver.o
 	${F90C} -o $@ $^
 numCore.pre.xb.x2w.w2f.post.f90 $(addsuffix .f90, $(RTSUPP)) iaddr.c : toolChain 
 toolChain : numCore.f90
@@ -22,6 +22,10 @@ ad_inline.f:toolChain
 
 %.o : %.f90
 	${F90C} -o $@ -c $< 
+
+%.o : %.f
+	${F90C} ${F90FLAGS} -g -O -o $@ -c $< 
+
 %.o : %.c
 	${CC} -o $@ -c $< 
 

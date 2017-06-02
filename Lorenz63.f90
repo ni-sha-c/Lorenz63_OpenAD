@@ -6,15 +6,13 @@ contains
 
 subroutine Xnp1(X,Xnp1_res,r)
 
-        
-    implicit none
-	real(kind=8), intent(in), dimension(3) :: X
-    real(kind=8), dimension(3):: k1, k2, k3, k4
-	real(kind=8), intent(out), dimension(3) :: Xnp1_res
-    real(kind=8), dimension(3):: ddt
+	implicit none
+	double precision, dimension(3):: X, Xnp1_res
+    double precision, dimension(3):: k1, k2, k3, k4
+	double precision, dimension(3):: ddt
 	integer :: i
-	real(kind=8) :: dt
-	real(kind=8), intent(in) :: r
+	double precision :: dt
+	double precision, intent(in) :: r
 	
 	dt = 0.005d0
 		
@@ -37,19 +35,19 @@ end subroutine Xnp1
 subroutine sys_params(sigma, b)
 	
 	implicit none
-	real(kind=8), intent(out) :: sigma, b
+	double precision, intent(out) :: sigma, b
 	sigma = 10.d0
 	b = 8.d0/3.d0
 
 end subroutine sys_params
 subroutine dXdt(X,dXdt_res,r)
-    implicit none
-	real(kind=8), intent(in), dimension(3) :: X
-	real(kind=8), intent(in) :: r
-	real(kind=8), intent(out), dimension(3) :: dXdt_res
-	real(kind=8) :: sigma, b
+	implicit none
+	double precision, dimension(3) :: X
+	double precision, intent(in) :: r
+	double precision, intent(out), dimension(3) :: dXdt_res
+	double precision :: sigma, b
 	integer :: i
-	real(kind=8) :: dt
+	double precision :: dt
     
     dt = 0.005d0
 	call sys_params(sigma,b) 	
@@ -61,10 +59,10 @@ end subroutine dXdt
 subroutine dfdX(X,dfdX_res)
 
 	implicit none
-	real(kind=8), intent(in), dimension(3) :: X
-	real(kind=8), intent(out), dimension(3,3) :: dfdX_res 	
+	double precision, dimension(3) :: X
+	double precision, intent(out), dimension(3,3) :: dfdX_res 	
 	integer :: i,j
-	real(kind=8):: sigma,b,r
+	double precision:: sigma,b,r
 
 	dfdX_res = 0.d0
 	call sys_params(sigma,b)
@@ -86,30 +84,32 @@ end subroutine dfdX
 subroutine dvdt(X,v1,dvdt_res)
 
 		implicit none
-		real(kind=8), intent(in), dimension(3) :: X
-		real(kind=8), intent(out), dimension(3,1) :: dvdt_res
-		real(kind=8), dimension(3,3) :: dfdX_res
-		real(kind=8), intent(in), dimension(3,1) :: v1
-		real(kind=8), dimension(3,1):: dfdX_times_v
+		double precision, dimension(3) :: X
+		double precision, intent(out), dimension(3,1) :: dvdt_res
+		double precision, dimension(3,3) :: dfdX_res
+		double precision, dimension(3,1) :: v1
+		double precision, dimension(3,1):: dfdX_times_v
 		integer :: i		
 	
 		call dfdX(X,dfdX_res)
 		!Manual matrix-vector product
 		do i = 1,3,1
-			dfdX_times_v(i,1) = dfdX_res(i,1)*v1(1) + dfdX_res(i,2)*v1(2) + dfdX_res(i,3)*v1(3)
+			dvdt_res(i,1) = dfdX_res(i,1)*v1(1,1) + dfdX_res(i,2)*v1(2,1) + dfdX_res(i,3)*v1(3,1)
 		end do
-		dvdt_res = dfdX_times_v + reshape([0.d0,X(1),0.d0],[3,1])	
+		dvdt_res(1,1) = dvdt_res(1,1) + 0.d0
+		dvdt_res(2,1) = dvdt_res(2,1) + X(1)
+		dvdt_res(3,1) = dvdt_res(3,1) + 0.d0	
 
 end subroutine dvdt
 subroutine rk45_full(X,v,vnp1)
 !Assumes full perturbation vector.
 	implicit none
-	real(kind=8) , intent(in), dimension(3) :: X
-	real(kind=8) , intent(out), dimension(3,1) :: vnp1
-	real(kind=8) , intent(in), dimension(3,1) :: v
-	real(kind=8) , dimension(3,1) :: v1,k1,k2,k3,k4
-	real(kind=8) , dimension(3,1):: dvdt_res
-	real(kind=8) :: dt
+	double precision , dimension(3) :: X
+	double precision , intent(out), dimension(3,1) :: vnp1
+	double precision , dimension(3,1) :: v
+	double precision , dimension(3,1) :: v1,k1,k2,k3,k4
+	double precision , dimension(3,1):: dvdt_res
+	double precision :: dt
 
     
 

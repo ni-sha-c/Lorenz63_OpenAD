@@ -1,10 +1,10 @@
 subroutine head(s,zres)
 	use Lorenz63
 	implicit none 
-	real(kind=8), dimension(3) :: X
-	real(kind=8), dimension(3) :: Xnp1_res
-	real(kind=8), intent(in) :: s
-	real(kind=8), intent(out) :: zres
+	double precision, dimension(3) :: X
+	double precision, dimension(3) :: Xnp1_res
+	double precision, intent(in) :: s
+	double precision, intent(out) :: zres
 	integer :: t
 
 

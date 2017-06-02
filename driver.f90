@@ -5,11 +5,11 @@ program driver
 	implicit none 
 	external head
 	type(active) :: x, y
-	real(kind=8), dimension(3) :: X0
-	real(kind=8), dimension(3,1) :: v0,v
-	real(kind=8) :: dzds_fd
+	double precision, dimension(3) :: X0
+	double precision, dimension(3,1) :: v0,v
+	double precision :: dzds_fd
 	integer :: t
-	real(kind=8) :: zs, z0
+	double precision :: zs, z0
 	x%v=2.8D1
 	y%d=1.0D0
 	our_rev_mode%tape=.TRUE.
